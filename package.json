@@ -1,0 +1,22 @@
+{
+  "name": "lol_node",
+  "version": "1.0.0",
+  "description": "League of Legends player look up web app",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "",
+    "ejs": "",
+    "express": "",
+    "request": "",
+	"fs": ""
+  },
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/bluntcarrot/lol_node"
+  },
+  "author": "Devin Howard",
+  "license": "ISC"
+}

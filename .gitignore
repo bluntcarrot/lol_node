@@ -16,7 +16,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
+DO_NOT_UPLOAD_api_key.txt
 # =========================
 # Operating System Files
 # =========================

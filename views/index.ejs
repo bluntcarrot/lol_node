@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include partials/header %>
+</head>
+<body class="container-fluid">
+	<nav class="navbar navbar-fixed-top navbar-light bg-faded">
+		<button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar2">
+			&#9776;
+		</button>
+		<div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
+			<a class="navbar-brand" href="#">LoL Node</a>
+			<ul class="nav navbar-nav">
+				<!--<li class="nav-item active">
+					<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Features</a>
+				</li>-->
+			</ul>
+			<div class="form-inline pull-xs-right">
+				<a href="#"><span class="label label-pill label-info label_tags">Support</span></a>
+				<a href="#"><span class="label label-pill label-danger label_tags">Fighter</span></a>
+				<a href="#"><span class="label label-pill label-success label_tags">Tank</span></a>
+				<a href="#"><span class="label label-pill label-warning label_tags">Assassin</span></a>
+				<a href="#"><span class="label label-pill label-success label_tags">Melee</span></a>
+				<a href="#"><span class="label label-pill label-danger label_tags">Marksman</span></a>
+				<a href="#"><span class="label label-pill label-warning label_tags">Mage</span></a>
+				<a href="#"><select class="form-control champ_search"></select>
+				<a class="btn btn-primary-outline btn_champ_search" type="submit">Search</a>
+			</div>
+		</div>
+	</nav>
+   <!-- <header><h1>LoL Node</h1></header>-->
+
+    <main>
+		<div class="row">
+			<%- list %>
+		</div>
+    </main>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						Champion Overview
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="pull-left left"></div>
+						<div class="pull-right right"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Modal -->
+	
+    <footer>
+        <% include partials/footer %>
+    </footer>
+    <script>
+		window.champions = <%- JSON.stringify(champs_obj) %>
+
+		var champ_search = $('.champ_search').selectize({
+			valueField: 'id',
+			labelField: 'id',
+			searchField: ['id', 'text'],
+			options: <%- JSON.stringify(champ_obj.c_arr) %>
+		});
+		
+		function champ_modal( the_champ ){
+			$('#myModal').modal('show');
+		};
+		
+		$('.label_tags').off('click');
+		$('.label_tags').on('click', function(){
+			var champ_type = this.textContent;
+		});
+		
+		$('.btn_champ_search').off('click');
+		$('.btn_champ_search').on('click', function(){
+			window.champ = champ_search[0].selectize.getValue();
+			champ_modal(champ);
+		});
+		
+		function compare( champ ){
+			//$('.modal-title').html(this_champ.key + " - Champion Overview");
+			var compare_champ = window.champions[champ];
+
+			$('.modal-body .right').html(
+				'<p>HP - '
+				+ compare_champ.stats.hp +'</p>'
+				+ '<p>Attack damage - '
+				+ compare_champ.stats.attackdamage +'</p>'
+				+ '<p>Range - '
+				+ compare_champ.stats.attackrange +'</p>'
+				+ '<p>Armor - '
+				+ compare_champ.stats.armor +'</p>'
+				+ '<p>Movement speed - '
+				+ compare_champ.stats.movespeed+'</p>'
+			);
+
+			$('.modal-body .right').prepend('<p><img src="http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/'+champ+'.png" /></p>');
+		};
+		
+		$('.champ_img').off('click');
+		$('.champ_img').on('click', function (){
+			window.champ = $(this).attr('id');
+			champ_modal(champ);
+		});
+		
+		$('#myModal').on('show.bs.modal', function (e,t,g){
+			var this_champ = window.champions[champ];
+			
+			$('.modal-title').html(this_champ.key + " - Champion Overview");
+			$('.modal-body .left').html(
+				'<p>HP - '
+				+ this_champ.stats.hp +'</p>'
+				+ '<p>Attack damage - '
+				+ this_champ.stats.attackdamage +'</p>'
+				+ '<p>Range - '
+				+ this_champ.stats.attackrange +'</p>'
+				+ '<p>Armor - '
+				+ this_champ.stats.armor +'</p>'
+				+ '<p>Movement speed - '
+				+ this_champ.stats.movespeed+'</p>'
+				+ '<p><select class="select_compare"></select><button type="button" class="btn btn-primary">Compare</button></p>'
+			);
+
+			$('.modal-body .left').prepend('<p><img src="http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/'+window.champ+'.png" /></p>');
+			
+			var champ_select = $('.select_compare').selectize({
+				valueField: 'id',
+				labelField: 'id',
+				searchField: ['id', 'text'],
+				options: <%- JSON.stringify(champ_obj.c_arr) %>
+			});
+			
+			window.selectize = champ_select[0].selectize;
+
+			$('.modal-body button').off('click');
+			$('.modal-body button').on('click', function (){
+				compare(window.selectize.getValue());
+			});
+		});
+		
+		$('#myModal').on('hide.bs.modal', function (e,t,g){
+			$('.modal-body .left').html('');
+			$('.modal-body .right').html('');
+		});
+	</script>
+</body>
+</html>
