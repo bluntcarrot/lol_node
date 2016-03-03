@@ -114,6 +114,12 @@
 		$('.champ_img').on('click', function (){
 			window.champ = $(this).attr('id');
 			champ_modal(champ);
+			$.ajax({
+				url: "/champ_overview",
+				method: "GET"
+			}).done(function(data) {
+				debugger;
+			});
 		});
 		
 		$('#myModal').on('show.bs.modal', function (e,t,g){
