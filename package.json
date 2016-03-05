@@ -1,7 +1,7 @@
 {
   "name": "lol_node",
   "version": "1.0.0",
-  "description": "League of Legends player look up web app",
+  "description": "League of Legends champion look up web app",
   "main": "server.js",
   "dependencies": {
     "body-parser": "",

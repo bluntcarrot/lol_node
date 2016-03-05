@@ -13,7 +13,7 @@ var Champions = require("./routes/champions"),
 	
 app.get('/', Champions.index);
 // use GET request on first click of champ image, load related data
-app.get('/champ_overview', Champions.champ_overview);
+app.post('/champ_overview', Champions.champ_overview);
 app.get('/admin/load_champions_data', Admin.load_champ_data);
 
 
