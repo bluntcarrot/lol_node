@@ -1,9 +1,9 @@
 var request = require('request'),
 	fs = require('fs');
 
-exports.load_champ_data = function (req, res){
+exports.load_champ_data = function (req, res) {
 	
-	fs.readFile('./DO_NOT_UPLOAD_api_key.txt', 'utf8', function (err, key){
+	fs.readFile('./DO_NOT_UPLOAD_api_key.txt', 'utf8', function (err, key) {
 		if (err) throw err;
 	
 		request({
@@ -11,7 +11,7 @@ exports.load_champ_data = function (req, res){
 			qs: {champData: 'image,info,passive,stats,tags', api_key: key}
 		})
 		.pipe(
-			fs.createWriteStream('./model/champions_data.json'),
+			fs.createWriteStream('./data/champions.json'),
 			res.send('Finished.')
 		);
 	});

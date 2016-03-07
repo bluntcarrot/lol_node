@@ -9,7 +9,7 @@
 			&#9776;
 		</button>
 		<div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
-			<a class="navbar-brand" href="#">LoL Node</a>
+			<a class="navbar-brand" href="/">LoL Node</a>
 			<ul class="nav navbar-nav">
 				<!--<li class="nav-item active">
 					<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
@@ -34,7 +34,7 @@
    <!-- <header><h1>LoL Node</h1></header>-->
 
     <main>
-		<div class="row">
+		<div class="row main_view">
 			<%- list %>
 		</div>
 		<div id="overview_modal"></div>
@@ -43,75 +43,78 @@
     <footer>
         <% include partials/footer %>
     </footer>
+	
     <script>
-		window.champions = <%- JSON.stringify(champs_obj) %>
+	window.champions = <%- JSON.stringify(champs_obj) %>
 
-		var champ_search = $('.champ_search').selectize({
-			valueField: 'id',
-			labelField: 'id',
-			searchField: ['id', 'text'],
-			options: <%- JSON.stringify(champ_obj.c_arr) %>
+	var champ_search = $('.champ_search').selectize({
+		valueField: 'id',
+		labelField: 'id',
+		searchField: ['id', 'text'],
+		options: <%- JSON.stringify(champ_obj) %>
+	});
+
+	function champ_modal(the_champ){
+		$.ajax({
+			url: "/champ_overview",
+			method: "GET",
+			dataType: "html"
+		}).done(function(data) {
+			$('#overview_modal').html(data);
 		});
+	};
+
+	$('.label_tags').off('click');
+	$('.label_tags').on('click', function (){
+		var combat_type = this.textContent,
+			tmp_array = [];
 		
-		function handler(args){
-			if(!args){
-				return;
+		$.each(champions, function (index, value){
+			if (champions[index].tags.indexOf(combat_type) > -1){
+				tmp_array.push(index);
 			}
-			$.ajax({
-				url: args.url,//"/champ_overview"
-				method: args.method,//"POST"
-				data: args.data//{ champ: the_champ }
-			}).done(function(data) {
-				$('#overview_modal').html(data);
-			});
-		};
-		
-		function champ_modal(the_champ){
-			$.ajax({
-				url: "/champ_overview",
-				method: "POST",
-				data: { champ: the_champ }
-			}).done(function(data) {
-				$('#overview_modal').html(data);
-			});
-		};
-		
-		$('.label_tags').off('click');
-		$('.label_tags').on('click', function(){
-			var champ_type = this.textContent;
 		});
 		
-		$('.btn_champ_search').off('click');
-		$('.btn_champ_search').on('click', function(){
-			window.champ = champ_search[0].selectize.getValue();
-			champ_modal(champ);
+		$.ajax({
+			url: "/combat_type/" + combat_type,
+			method: "GET",
+			dataType: "html"
+		}).done(function(data) {
+			$('.main_view').html(data);
 		});
-		
-		function compare( champ ){
-			//$('.modal-title').html(this_champ.key + " - Champion Overview");
-			var compare_champ = window.champions[champ];
+	});
 
-			$('.modal-body .right').html(
-				'<p>HP - '
-				+ compare_champ.stats.hp +'</p>'
-				+ '<p>Attack damage - '
-				+ compare_champ.stats.attackdamage +'</p>'
-				+ '<p>Range - '
-				+ compare_champ.stats.attackrange +'</p>'
-				+ '<p>Armor - '
-				+ compare_champ.stats.armor +'</p>'
-				+ '<p>Movement speed - '
-				+ compare_champ.stats.movespeed+'</p>'
-			);
+	$('.btn_champ_search').off('click');
+	$('.btn_champ_search').on('click', function () {
+		window.champ = champ_search[0].selectize.getValue();
+		champ_modal(champ);
+	});
 
-			$('.modal-body .right').prepend('<p><img src="http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/'+champ+'.png" /></p>');
-		};
-		
-		$('.champ_img').off('click');
-		$('.champ_img').on('click', function (){
-			window.champ = $(this).attr('id');
-			champ_modal(champ);
-		});
+	function compare (champ) {
+		//$('.modal-title').html(this_champ.key + " - Champion Overview");
+		var compare_champ = window.champions[champ];
+
+		$('.modal-body .right').html(
+			'<p>HP - '
+			+ compare_champ.stats.hp +'</p>'
+			+ '<p>Attack damage - '
+			+ compare_champ.stats.attackdamage +'</p>'
+			+ '<p>Range - '
+			+ compare_champ.stats.attackrange +'</p>'
+			+ '<p>Armor - '
+			+ compare_champ.stats.armor +'</p>'
+			+ '<p>Movement speed - '
+			+ compare_champ.stats.movespeed+'</p>'
+		);
+
+		$('.modal-body .right').prepend('<p><img src="https://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/'+champ+'.png" /></p>');
+	};
+
+	$('.champ_img').off('click');
+	$('.champ_img').on('click', function () {
+		window.champ = $(this).attr('id');
+		champ_modal(champ);
+	});
 	</script>
 </body>
 </html>
