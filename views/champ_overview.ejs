@@ -52,11 +52,11 @@ var champ_select = $('.select_compare').selectize({
 });
 
 $('.modal-body button').off('click');
-$('.modal-body button').on('click', function () {
+$('.modal-body button').on('click', function (){
 	compare(champ_select[0].selectize.getValue());
 });
 
-$('#myModal').on('hide.bs.modal', function (e,t,g) {
+$('#myModal').on('hide.bs.modal', function (e,t,g){
 	$('.modal-body .left').html('');
 	$('.modal-body .right').html('');
 });

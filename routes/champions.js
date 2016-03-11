@@ -4,7 +4,7 @@ var list = '',
 	c_arr = [];
 
 for (var key in champions_obj) {
-	list = list + '<div style="padding-bottom:10px;" class="col-lg-1 col-sm-2 col-xs-3" ><img id='+ key +' class="champ_img" style="border-radius:4px;box-shadow: 4px 4px 4px #ccc;" src="https://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/'+ key +'.png" /></div>';
+	list = list + '<div onclick="add_events()" style="padding-bottom:10px;" class="col-lg-1 col-sm-2 col-xs-3" ><img id='+ key +' class="champ_img" style="border-radius:4px;box-shadow: 4px 4px 4px #ccc;" src="https://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/'+ key +'.png" /></div>';
 	c_arr.push({id: key, text: key});
 }
 
@@ -20,7 +20,7 @@ exports.combat_type = function (req, res) {
 	var filter_champs = '';
 	for (var key in champions_obj) {
 		if (champions_obj[key].tags.indexOf(req.params.id) > -1){
-			filter_champs = filter_champs + '<div style="padding-bottom:10px;" class="col-lg-1 col-sm-2 col-xs-3" ><img id='+ key +' class="champ_img" style="border-radius:4px;box-shadow: 4px 4px 4px #ccc;" src="https://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/'+ key +'.png" /></div>';
+			filter_champs = filter_champs + '<div onclick="add_events()" style="padding-bottom:10px;" class="col-lg-1 col-sm-2 col-xs-3" ><img id='+ key +' class="champ_img" style="border-radius:4px;box-shadow: 4px 4px 4px #ccc;" src="https://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/'+ key +'.png" /></div>';
 		}
 	};
 	res.send(filter_champs);

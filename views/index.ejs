@@ -64,33 +64,58 @@
 		});
 	};
 
+	
 	$('.label_tags').off('click');
 	$('.label_tags').on('click', function (){
-		var combat_type = this.textContent,
+		
+		// add a check here to see if the button has been clicked or not
+		//if the button is being clicked for the second time, then all the champ images need to appear again
+		if ( $(this).hasClass('is_active') ){
+			$('.main_view').html('<%- list %>');
+			is_active = true;
+			$(this).removeClass('is_active');
+		}else{
+			is_active = false;
+			$(this).addClass('is_active');
+			
+			var combat_type = this.textContent,
 			tmp_array = [];
-		
-		$.each(champions, function (index, value){
-			if (champions[index].tags.indexOf(combat_type) > -1){
-				tmp_array.push(index);
-			}
-		});
-		
-		$.ajax({
-			url: "/combat_type/" + combat_type,
-			method: "GET",
-			dataType: "html"
-		}).done(function(data) {
-			$('.main_view').html(data);
-		});
-	});
+			
+			$.each(champions, function (index, value){
+				if (champions[index].tags.indexOf(combat_type) > -1){
+					tmp_array.push(index);
+				}
+			});
+			
+			$.ajax({
+				url: "/combat_type/" + combat_type,
+				method: "GET",
+				dataType: "html"
+			}).done(function (data){
+				$('.main_view').html(data);
+			});
+		}
 
+		
+	});
+	
+	function add_events(){
+		$('.champ_img').off('click');
+		$('.champ_img').on('click', function (){
+			window.champ = $(this).attr('id');
+			champ_modal(champ);
+		});
+	};
+	
+	add_events();
+	
 	$('.btn_champ_search').off('click');
 	$('.btn_champ_search').on('click', function () {
 		window.champ = champ_search[0].selectize.getValue();
 		champ_modal(champ);
 	});
 
-	function compare (champ) {
+	function compare (champ){
 		//$('.modal-title').html(this_champ.key + " - Champion Overview");
 		var compare_champ = window.champions[champ];
 
@@ -109,12 +134,6 @@
 
 		$('.modal-body .right').prepend('<p><img src="https://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/'+champ+'.png" /></p>');
 	};
-
-	$('.champ_img').off('click');
-	$('.champ_img').on('click', function () {
-		window.champ = $(this).attr('id');
-		champ_modal(champ);
-	});
 	</script>
 </body>
 </html>
