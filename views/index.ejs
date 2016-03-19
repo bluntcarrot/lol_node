@@ -67,15 +67,17 @@
 	
 	$('.label_tags').off('click');
 	$('.label_tags').on('click', function (){
-		
-		// add a check here to see if the button has been clicked or not
-		//if the button is being clicked for the second time, then all the champ images need to appear again
+
 		if ( $(this).hasClass('is_active') ){
 			$('.main_view').html('<%- list %>');
-			is_active = true;
+			is_active = false;
 			$(this).removeClass('is_active');
 		}else{
-			is_active = false;
+			if ( $('.is_active').length > 0 ){
+				// if an old is_active class is found remove it first
+				$('.is_active').removeClass('is_active');
+			}
+			is_active = true;
 			$(this).addClass('is_active');
 			
 			var combat_type = this.textContent,
@@ -95,7 +97,6 @@
 				$('.main_view').html(data);
 			});
 		}
-
 		
 	});
 	
